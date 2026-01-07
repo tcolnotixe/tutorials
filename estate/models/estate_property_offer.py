@@ -34,3 +34,15 @@ class EstatePropertyOffer(models.Model):
         for record in self:
             delta = relativedelta(record.date_deadline, record.create_date)
             record.validity = delta.days
+
+    # ------------------------------------------- Actions -----------------------------------------
+    def action_accept(self):
+        for record in self:
+            record.property_id._action_accept_offer(self)
+            record.status = "accepted"
+        return True
+
+    def action_refuse(self):
+        for record in self:
+            record.status = "refused"
+        return True

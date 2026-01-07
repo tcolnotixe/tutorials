@@ -1,6 +1,7 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
 
 class EstateProperty(models.Model):
@@ -42,7 +43,7 @@ class EstateProperty(models.Model):
     property_type_id = fields.Many2one(
         "estate.property.type", string="Property Type")
     buyer_id = fields.Many2one(
-        "res.partner", string="Buyer", copy=False
+        "res.partner", string="Buyer", copy=False, readonly=True
     )
     salesperson_id = fields.Many2one(
         "res.users", string="Salesman", default=lambda self: self._default_salesperson_id()
@@ -81,3 +82,28 @@ class EstateProperty(models.Model):
     def _onchange_garden(self):
         self.garden_area = self.garden and 10
         self.garden_orientation = self.garden and "north"
+
+    # ------------------------------------------- Actions -----------------------------------------
+    def action_sold(self):
+        for record in self:
+            if self.state == "cancelled":
+                raise UserError("A cancelled property cannot be sold.")
+            self.state = "sold"
+        return True
+
+    def action_cancel(self):
+        for record in self:
+            if self.state == "sold":
+                raise UserError("A sold property cannot be cancelled.")
+            self.state = "cancelled"
+        return True
+
+    def _action_accept_offer(self, offer):
+        for record in self:
+            if len(record.offer_ids.filtered(lambda o: o.status == "accepted")) > 0:
+                raise UserError(
+                    "Only one offer can be accepted. If you want to accept this offer, please make sure other offers are not accepted.")
+
+            record.selling_price = offer.price
+            record.buyer_id = offer.partner_id
+        return True
