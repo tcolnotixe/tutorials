@@ -8,6 +8,10 @@ class EstatePropertyOffer(models.Model):
     _description = "A property offer is an amount a potential buyer offers to the seller. The offer can be lower or higher than the expected price."
 
     price = fields.Float()
+    _check_price = models.Constraint(
+        'CHECK(price > 0)',
+        'Offer price must be stricly positive.'
+    )
     status = fields.Selection(
         selection=[("accepted", "Accepted"), ("refused", "Refused")], copy=False)
     validity = fields.Integer(string="Validity (days)", default=7)

@@ -1,7 +1,8 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools.float_utils import float_compare, float_is_zero
 
 
 class EstateProperty(models.Model):
@@ -14,7 +15,15 @@ class EstateProperty(models.Model):
     date_availability = fields.Date(string="Available From", copy=False,
                                     default=lambda self: self._default_date_availability())
     expected_price = fields.Float(required=True)
+    _check_expected_price = models.Constraint(
+        'CHECK(expected_price > 0)',
+        'Expected price must be stricly positive.'
+    )
     selling_price = fields.Float(readonly=True, copy=False)
+    _check_selling_price = models.Constraint(
+        'CHECK(selling_price >= 0)',
+        'Expected price must be positive.'
+    )
     bedrooms = fields.Integer(default="2")
     living_area = fields.Integer()
     facades = fields.Integer()
@@ -107,3 +116,14 @@ class EstateProperty(models.Model):
             record.selling_price = offer.price
             record.buyer_id = offer.partner_id
         return True
+
+    # ---------------------------------------- Constraints ----------------------------------------
+    @api.constrains("selling_price", "expected_price")
+    def _check_selling_price(self):
+        for record in self:
+            if float_is_zero(record.selling_price, 2):
+                continue
+
+            if float_compare(record.selling_price, 0.9 * record.expected_price, 2) < 0:
+                raise ValidationError(
+                    "The selling price must be higher than 90% of the expected price. You must reduce the expected price to accept this offer.")
