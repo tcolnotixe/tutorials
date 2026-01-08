@@ -6,6 +6,7 @@ from odoo import api, fields, models
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
     _description = "A property offer is an amount a potential buyer offers to the seller. The offer can be lower or higher than the expected price."
+    _order = "price desc"
 
     price = fields.Float()
     _check_price = models.Constraint(
@@ -23,15 +24,19 @@ class EstatePropertyOffer(models.Model):
         "res.partner", string="Partner", required=True)
     property_id = fields.Many2one(
         "estate.property", string="Property", required=True)
+    property_type_id = fields.Many2one(
+        "estate.property.type", string="Property type", related="property_id.property_type_id", store=True)
 
     # ------------------------------------------- Computed ----------------------------------------
     @api.depends("create_date", "validity")
     def _compute_date_deadline(self):
         for record in self:
-            if not record.create_date or not record.validity:
+            if not record.validity:
                 continue
 
-            record.date_deadline = record.create_date + \
+            create_date = record.create_date or fields.Date.context_today(self)
+
+            record.date_deadline = create_date + \
                 relativedelta(days=record.validity)
 
     def _inverse_date_deadline(self):

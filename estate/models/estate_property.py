@@ -8,6 +8,7 @@ from odoo.tools.float_utils import float_compare, float_is_zero
 class EstateProperty(models.Model):
     _name = "estate.property"
     _description = "Real estate property"
+    _order = "id desc"
 
     name = fields.Char(string="Title", required=True)
     description = fields.Text()
@@ -43,7 +44,7 @@ class EstateProperty(models.Model):
         ('accepted', 'Offer Accepted'),
         ('sold', 'Sold'),
         ('cancelled', 'Cancelled')
-    ], default='new', copy=False)
+    ], default='new', copy=False, string="Status")
     total_area = fields.Integer(compute="_compute_total_area")
     best_price = fields.Float(
         compute="_compute_best_price", string="Best Offer")
@@ -111,7 +112,7 @@ class EstateProperty(models.Model):
         for record in self:
             if len(record.offer_ids.filtered(lambda o: o.status == "accepted")) > 0:
                 raise UserError(
-                    "Only one offer can be accepted. If you want to accept this offer, please make sure other offers are not accepted.")
+                    "Only one offer can be accepted.")
 
             record.selling_price = offer.price
             record.buyer_id = offer.partner_id
