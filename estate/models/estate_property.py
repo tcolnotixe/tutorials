@@ -116,6 +116,7 @@ class EstateProperty(models.Model):
 
             record.selling_price = offer.price
             record.buyer_id = offer.partner_id
+            record.state = 'accepted'
         return True
 
     # ---------------------------------------- Constraints ----------------------------------------
