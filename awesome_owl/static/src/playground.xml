@@ -10,9 +10,13 @@
             <p>The sum is: <t t-esc="sum.value"/></p>
         </div>
 
-        <div>
+        <div class="p-3">
             <Card title="'card 1'" content="str1"/>
             <Card title="'card 2'" content="str2"/>
+        </div>
+
+        <div class="p-3">
+            <TodoList />
         </div>
     </t>
 
