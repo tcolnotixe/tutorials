@@ -12,6 +12,11 @@ export class TodoItem extends Component {
         todo: {
             type: Object,
             shape: TodoShape
-        }
+        },
+        toggleState: Function
     };
+
+    onToggled() {
+        this.props.toggleState(this.props.todo.id);
+    }
 }

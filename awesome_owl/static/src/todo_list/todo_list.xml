@@ -13,7 +13,7 @@
                 class="mb-2" />
 
             <t t-foreach="todos" t-as="todo" t-key="todo.id" >
-                <TodoItem todo="todo" />
+                <TodoItem todo="todo" toggleState.bind="toggleState" />
             </t>
         </div>
     </t>
