@@ -8,7 +8,16 @@
                 <button class="btn btn-primary" t-on-click="openCustomersView">Customers</button>
                 <button class="btn btn-primary" t-on-click="openLeadsView">Leads</button>
             </t>
-            Some content
+            
+            <DashboardItem>
+                some content
+            </DashboardItem>
+            <DashboardItem size="2">
+                I love milk
+            </DashboardItem>
+            <DashboardItem size="1">
+                some content
+            </DashboardItem>
         </Layout>
     </t>
 
