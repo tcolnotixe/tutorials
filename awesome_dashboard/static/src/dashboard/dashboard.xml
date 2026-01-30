@@ -10,52 +10,12 @@
             </t>
             
             <div class="d-flex flex-wrap" t-if="statistics.isReady">
-                <DashboardItem size="1.5">
-                    <div class="text-center card-title">
-                        Average amount of t-shirt by order this month
-                    </div>
-                    <div class="fs-1 fw-bold text-center text-success">
-                        <t t-esc="statistics.average_quantity"/>
-                    </div>
-                </DashboardItem>
-                <DashboardItem size="1.5">
-                    <div class="text-center card-title">
-                        Average time for an order to go from 'new' to 'cancelled'
-                    </div>
-                    <div class="fs-1 fw-bold text-center text-success">
-                        <t t-esc="statistics.average_time"/>
-                    </div>
-                </DashboardItem>
-                <DashboardItem>
-                    <div class="text-center card-title">
-                        Number of new orders this month
-                    </div>
-                    <div class="fs-1 fw-bold text-center text-success">
-                        <t t-esc="statistics.nb_new_orders"/>
-                    </div>
-                </DashboardItem>
-                <DashboardItem>
-                    <div class="text-center card-title">
-                        Number of cancelled orders this month
-                    </div>
-                    <div class="fs-1 fw-bold text-center text-success">
-                        <t t-esc="statistics.nb_cancelled_orders"/>
-                    </div>
-                </DashboardItem>
-                <DashboardItem>
-                    <div class="text-center card-title">
-                        Total amount of new orders this month
-                    </div>
-                    <div class="fs-1 fw-bold text-center text-success">
-                        <t t-esc="statistics.total_amount"/>
-                    </div>
-                </DashboardItem>
-                <DashboardItem size="2">
-                    <div class="text-center card-title">
-                        Shirt orders by size
-                    </div>
-                    <PieChart label="'Shirt oders by size'" data="statistics.orders_by_size" />
-                </DashboardItem>
+                <t t-foreach="items" t-as="item" t-key="item.id">
+                    <DashboardItem size="item.size || 1">
+                        <t t-set="itemProp" t-value="item.props ? item.props(statistics) : {'data': statistics}"/>
+                        <t t-component="item.Component" t-props="itemProp" />
+                    </DashboardItem>
+                </t>
             </div>
         </Layout>
     </t>
