@@ -49,6 +49,12 @@
                     <t t-esc="statistics.total_amount"/>
                 </div>
             </DashboardItem>
+            <DashboardItem size="2">
+                <div class="text-center card-title">
+                    Shirt orders by size
+                </div>
+                <PieChart label="'Shirt oders by size'" data="statistics.orders_by_size" />
+            </DashboardItem>
         </Layout>
     </t>
 
