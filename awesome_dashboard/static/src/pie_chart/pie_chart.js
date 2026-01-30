@@ -1,4 +1,4 @@
-import { Component, onWillStart, useRef, onMounted, onWillUnmount } from "@odoo/owl";
+import { Component, onWillStart, useRef, onMounted, onWillUnmount, useEffect } from "@odoo/owl";
 import { loadJS } from "@web/core/assets";
 import { getColor } from "@web/core/colors/colors";
 
@@ -22,12 +22,31 @@ export class PieChart extends Component {
                 this.chart.destroy();
             }
         });
+
+        useEffect(
+            () => {
+                if (!this.chart) {
+                    this.renderChart();
+                } else {
+                    this.updateChart();
+                }
+
+            },
+            () => [this.props.data]
+        )
+    }
+
+    getChartData() {
+        const labels = Object.keys(this.props.data);
+        const data = Object.values(this.props.data);
+        const colors = labels.map((_, index) => getColor(index, "light", "sm"));
+
+        return [labels, data, colors]
     }
 
     renderChart() {
-        const labels = Object.keys(this.props.data);
-        const data = Object.values(this.props.data);
-        const color = labels.map((_, index) => getColor(index, "light", "sm"));
+        const [ labels, data, colors ] = this.getChartData();
+        
         this.chart = new Chart(this.canvasRef.el, {
             type: "pie",
             data: {
@@ -36,10 +55,24 @@ export class PieChart extends Component {
                     {
                         label: this.props.label,
                         data: data,
-                        backgroundColor: color,
+                        backgroundColor: colors,
                     },
                 ],
             },
         });
+    }
+
+    updateChart() {
+        const [ _, data, colors ] = this.getChartData();
+
+        this.chart.data.datasets = [
+            {
+                label: this.props.label,
+                data: data,
+                colors: colors
+            }
+        ];
+
+        this.chart.update();
     }
 }

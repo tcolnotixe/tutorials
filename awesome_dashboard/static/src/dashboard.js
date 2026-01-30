@@ -1,4 +1,4 @@
-import { Component, onWillStart } from "@odoo/owl";
+import { Component, useState } from "@odoo/owl";
 import { Layout } from "@web/search/layout";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
@@ -15,11 +15,7 @@ class AwesomeDashboard extends Component {
         };
 
         this.action = useService("action");
-        this.statisticsService = useService("awesome_dashboard.statistics");
-
-        onWillStart(async () => {
-            this.statistics = await this.statisticsService.loadStatistics();
-        });
+        this.statistics = useState(useService("awesome_dashboard.statistics"));
     }
 
     openCustomersView() {
