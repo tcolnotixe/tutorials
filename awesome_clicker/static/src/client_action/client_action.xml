@@ -9,14 +9,14 @@
                     Increment
                 </button>
             </div>
-            <div t-if="clicker.state.level >= 1" class="card mt-2 ms-1 pt-2">
+            <div t-if="clicker.level >= 1" class="card mt-2 ms-1 pt-2">
                 <h2 class="ms-2">Bots</h2>
                 <div class="card-header">
-                    <t t-esc="clicker.state.clickBots" />x Click Bots (10 clicks/10 seconds)
+                    <t t-esc="clicker.clickBots" />x Click Bots (10 clicks/10 seconds)
                     <i class="fa fa-android" />
                 </div>
                 <div class="card-body">
-                    <button t-on-click="() => clicker.buyClickBot()" class="btn btn-primary" t-att-disabled="clicker.state.clicks &lt; 1000">
+                    <button t-on-click="() => clicker.buyClickBot()" class="btn btn-primary" t-att-disabled="clicker.clicks &lt; 1000">
                         Buy ClickBots (1000 clicks)
                     </button>
                 </div>
