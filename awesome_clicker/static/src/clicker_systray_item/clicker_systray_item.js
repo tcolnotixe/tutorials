@@ -6,24 +6,20 @@ export class ClickerSystray extends Component {
     static template = "awesome_clicker.ClickerSystray";
 
     setup() {
-        this.state = useState({counter: 0});
+        this.clickerService = useService("awesome_clicker.clicker_service");
+        this.state = useState(this.clickerService.state);
         this.actionService = useService("action");
-        useExternalListener(document.body, "click", () => this.increment(1), { capture: true });
+        useExternalListener(document.body, "click", () => this.clickerService.increment(1), { capture: true });
     }
 
     open() {
-        this.increment(9);
         this.actionService.doAction({
             type: "ir.actions.client",
             tag: "awesome_clicker.ClientAction",
             target: "new",
             name: "Clicker Game"
         });
-    }
-
-    increment(value) {
-        this.state.counter += value;
-    }
+    }    
 }
 
 const clickerSystrayItem = {

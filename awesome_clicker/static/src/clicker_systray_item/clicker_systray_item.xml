@@ -3,7 +3,7 @@
 <templates xml:space="preserve">
     <t t-name="awesome_clicker.ClickerSystray">
         <div class="o_nav_entry">
-            Clicks: <t t-esc="state.counter"/>
+            Clicks: <t t-esc="state.clicks"/>
             <button t-on-click="open" class="btn btn-secondary ms-2">
                 Open <i class="fa fa-lg fa-plus"/>
             </button>

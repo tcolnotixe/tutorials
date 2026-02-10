@@ -2,10 +2,11 @@
 
 <templates xml:space="preserve">
     <t t-name="awesome_clicker.ClientAction">
-        Clicker client action
-
-        <t t-set-slot="footer">
-            
-        </t>
+        <div class="m-2">
+            <span>Clicks: <t t-esc="state.clicks"/></span>
+            <button t-on-click="increment" class="btn btn-primary ms-2">
+                Increment
+            </button>
+        </div>
     </t>
 </templates>
