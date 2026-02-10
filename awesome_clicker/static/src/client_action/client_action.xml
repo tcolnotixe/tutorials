@@ -3,10 +3,24 @@
 <templates xml:space="preserve">
     <t t-name="awesome_clicker.ClientAction">
         <div class="m-2">
-            <span>Clicks: <ClickValue /></span>
-            <button t-on-click="() => clicker.increment(9)" class="btn btn-primary ms-2">
-                Increment
-            </button>
+            <div class="ms-2">
+                <span>Clicks: <ClickValue /></span>
+                <button t-on-click="() => clicker.increment(9)" class="btn btn-primary ms-2">
+                    Increment
+                </button>
+            </div>
+            <div t-if="clicker.state.level >= 1" class="card mt-2 ms-1 pt-2">
+                <h2 class="ms-2">Bots</h2>
+                <div class="card-header">
+                    <t t-esc="clicker.state.clickBots" />x Click Bots (10 clicks/10 seconds)
+                    <i class="fa fa-android" />
+                </div>
+                <div class="card-body">
+                    <button t-on-click="() => clicker.buyClickBot()" class="btn btn-primary" t-att-disabled="clicker.state.clicks &lt; 1000">
+                        Buy ClickBots (1000 clicks)
+                    </button>
+                </div>
+            </div>
         </div>
     </t>
 </templates>
